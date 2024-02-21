@@ -1,4 +1,3 @@
 cd admin-panel
 
-mkdir -p src/{library,app,features,common/{components,utils}}
-
+mkdir -p src/{components/{Header,Footer,Layout,Logout,Loading,Router,SiderMenu},library,app,features,common/{components,utils}}
