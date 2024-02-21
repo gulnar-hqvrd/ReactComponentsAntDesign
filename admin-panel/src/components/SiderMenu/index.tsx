@@ -4,13 +4,18 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu } from "antd";
 
 const { Sider } = Layout;
 
-const Index: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+export interface ISliderMenuProps {
+  path?: any;
+  collapsed: boolean;
+  onCollapse: any;
+}
 
+const Index = (props: ISliderMenuProps) => {
+  const { collapsed } = props;
   return (
     <div>
       <Sider

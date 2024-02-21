@@ -11,15 +11,19 @@ const App: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+
+  const onCollapse = (collapsed:boolean)=>{
+    setCollapsed(!collapsed)
+  }
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sider />
+      <Sider collapsed = {collapsed} onCollapse={onCollapse} />
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() =>onCollapse(collapsed)}
             style={{
               fontSize: "16px",
               width: 64,
