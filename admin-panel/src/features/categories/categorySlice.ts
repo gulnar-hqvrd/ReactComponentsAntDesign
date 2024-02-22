@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CategoryState } from "./types";
 import http from "../../common/utils/api";
+import { CategoryState } from "./types";
+import { stat } from "fs";
 
 const initialState: CategoryState = {
   list: [],
@@ -22,7 +23,7 @@ export const deleteCategory = createAsyncThunk("", async (id: string) => {
   return response;
 });
 
-const categorySLice = createSlice({
+const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {},
@@ -36,4 +37,4 @@ const categorySLice = createSlice({
   },
 });
 
-export default categorySLice.reducer;
+export default categorySlice.reducer;

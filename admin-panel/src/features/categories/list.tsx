@@ -1,87 +1,17 @@
-import React from "react";
-import { Row, Space, Table, Tag, Col, TableProps, Result, Button } from "antd";
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
-
-const columns: TableProps<DataType>["columns"] = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+import React, { useEffect } from "react";
+import { Row, Table, Col, Result, Button } from "antd";
+import { columns } from "./types";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchCategories } from "./categorySlice"; 
 
 const List: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const categories = useAppSelector((state) => state.category.list);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   return (
     <Row>
       <Col
@@ -93,7 +23,7 @@ const List: React.FC = () => {
           status="403"
           title="403"
           subTitle="Sorry, you are not authorized to access this page."
-          extra={<Button type="primary">Lost Connection</Button>}
+          extra={<Button type="primary">Pervin Nerdesin?</Button>}
         />
       </Col>
       <Col
@@ -104,7 +34,14 @@ const List: React.FC = () => {
         xl={{ span: 24, offset: 0 }}
         xxl={{ span: 24, offset: 0 }}
       >
-        <Table columns={columns} dataSource={data} />
+        <Table
+          locale={{
+            emptyText: "Data Yok :(",
+            filterSearchPlaceholder: "Ara",
+          }}
+          columns={columns}
+          dataSource={categories}
+        />
       </Col>
     </Row>
   );

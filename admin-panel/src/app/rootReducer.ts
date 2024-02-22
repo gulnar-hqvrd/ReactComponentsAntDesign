@@ -1,5 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
-const rootReducer = combineReducers({});
+import categorySlice from "../features/categories/categorySlice";
+
+const rootReducer = combineReducers({
+  category: categorySlice,
+});
+
 export default rootReducer;
-
-
