@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "../Layout/Applayout";
-
+import { List as CategoryList } from "../../features/categories/index";
 const Router = () => {
   return (
     <>
@@ -10,6 +10,10 @@ const Router = () => {
         <Route
           path="/deneme"
           element={<AppLayout content={<DenemeMemeler />} />}
+        />
+        <Route
+          path="/categories"
+          element={<AppLayout content={<CategoryList />} />}
         />
       </Routes>
     </>
