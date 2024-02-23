@@ -41,8 +41,11 @@ const categorySlice = createSlice({
         state.status = "succeeded";
         state.list = action.payload;
       })
-      .addCase(deleteCategory.fulfilled, (state, action) => {});
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.list = state.list.filter(
+          (category: Category) => category._id !== (action.payload as any)
+        );
+      });
   },
 });
-
 export default categorySlice.reducer;
