@@ -1,7 +1,10 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "../Layout/Applayout";
-import { List as CategoryList } from "../../features/categories/index";
+import {
+  List as CategoryList,
+  Create as CreateCategory,
+} from "../../features/categories/index";
 const Router = () => {
   return (
     <>
@@ -14,6 +17,11 @@ const Router = () => {
         <Route
           path="/categories"
           element={<AppLayout content={<CategoryList />} />}
+        />
+
+        <Route
+          path="/create-catogory"
+          element={<AppLayout content={<CreateCategory />} />}
         />
       </Routes>
     </>

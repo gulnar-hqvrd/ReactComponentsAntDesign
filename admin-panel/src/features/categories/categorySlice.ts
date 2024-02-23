@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import http from "../../common/utils/api";
-import { CategoryState } from "./types";
+import { Category, CategoryState } from "./types";
 import { stat } from "fs";
 
 const initialState: CategoryState = {
@@ -14,6 +14,14 @@ export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async () => {
     const response = await http.get("/categories");
+    return response.data;
+  }
+);
+
+export const createCategory = createAsyncThunk(
+  "categories/createCategory",
+  async (category: Category) => {
+    const response = await http.post("/categories", category);
     return response.data;
   }
 );
