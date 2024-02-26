@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Form, Input } from "antd";
-import { layout } from "./categoryForm";
 
-export default function FormComponent() {
-  const { onFinish } = props;
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+
+interface FormComponentProps {
+  onFinish: (values: any) => void;
+  initialValues?: any;
+}
+
+const FormComponent: React.FC<FormComponentProps> = (props) => {
+  const { onFinish, initialValues } = props;
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.resetFields();
+  }, [initialValues]);
+
   return (
     <>
       <Form
+        form={form}
         {...layout}
         name="nest-messages"
         onFinish={onFinish}
         style={{ maxWidth: 600 }}
-        validateMessages={validateMessages}
+        initialValues={initialValues}
+        // validateMessages={validateMessages}
       >
         <Form.Item
           name={"categoryName"}
@@ -31,4 +48,5 @@ export default function FormComponent() {
       </Form>
     </>
   );
-}
+};
+export default FormComponent;

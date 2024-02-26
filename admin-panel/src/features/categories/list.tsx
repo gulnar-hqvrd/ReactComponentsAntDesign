@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Row,
   Table,
@@ -17,6 +17,7 @@ import {
   deleteCategory,
   fetchCategories,
   fetchCategory,
+  updateCategory,
 } from "./categorySlice";
 import {
   SearchOutlined,
@@ -29,12 +30,13 @@ import { useNavigate } from "react-router-dom";
 import Card from "antd/es/card/Card";
 import CustomModal from "../../components/Modal";
 import CategoryDetail from "./components/categoryDetail";
+import FormComponent from "./components/categoryForm";
 
 const List: React.FC = () => {
-  // details modal
-  const [openDetail, setOpenDetail] = useState(false);
-
-  // modal conetent ( details, edit)
+  const [open, setOpen] = useState({
+    open: false,
+    content: "",
+  });
   const [content, setContent] = useState<React.ReactNode | null>(null);
 
   const dispatch = useAppDispatch();
@@ -48,12 +50,22 @@ const List: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setContent(<CategoryDetail category={category} />);
+    category &&
+      setContent(
+        open.content === "details" ? (
+          <CategoryDetail category={category} />
+        ) : (
+          <FormComponent onFinish={onFinish} initialValues={category} />
+        )
+      );
   }, [category]);
 
   const onDetailsHandle = useCallback(
     (e: boolean, id?: string) => {
-      setOpenDetail(e);
+      setOpen({
+        open: e,
+        content: "details",
+      });
       if (id) {
         dispatch(fetchCategory(id));
       }
@@ -61,59 +73,101 @@ const List: React.FC = () => {
     [dispatch]
   );
 
-  const onDeleteHandle = (e: any) => dispatch(deleteCategory(e));
+  const onDeleteHandle = useCallback(
+    (e: any) => {
+      dispatch(deleteCategory(e));
+    },
+    [dispatch]
+  );
+
+  const onEditHandle = (e: boolean, id?: string) => {
+    if (id) {
+      dispatch(fetchCategory(id));
+    }
+    setOpen({
+      open: e,
+      content: "edit",
+    });
+  };
+  // const onEditHandle = useCallback(
+  //   (e: boolean, id?: string) => {
+  //     if (id) {
+  //       dispatch(fetchCategory(id));
+  //     }
+  //     setOpen({
+  //       open: e,
+  //       content: "edit",
+  //     });
+  //   },
+  //   [dispatch]
+  // );
+
+  const onFinish = (values: any) => {
+    dispatch(updateCategory(values));
+    navigate("/category/index");
+  };
 
   const onNavigate = () => navigate("/category/create");
-  const columns: TableProps<CategoryType>["columns"] | any = [
-    {
-      title: "Category Name",
-      dataIndex: "categoryName",
-      key: "categoryName",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      dataIndex: "_id",
-      render: (id: any) => {
-        return (
-          <Dropdown
-            trigger={["click"]}
-            dropdownRender={(menu) => (
-              <div>
-                <Menu>
-                  <Menu.Item icon={<EditOutlined />}>Edit</Menu.Item>
-                  <Menu.Item
-                    onClick={() => onDetailsHandle(true, id)}
-                    icon={<SearchOutlined />}
-                  >
-                    Details
-                  </Menu.Item>
-                  <Menu.Item
-                    onClick={() => onDeleteHandle(id)}
-                    icon={<DeleteOutlined />}
-                    danger
-                  >
-                    Delete
-                  </Menu.Item>
-                </Menu>
-              </div>
-            )}
-          >
-            <Button size={"middle"}>
-              <Space>
-                <SettingOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-        );
+
+  type ColumnType = TableProps<CategoryType>["columns"] | any;
+  const columns: ColumnType = useMemo(
+    () => [
+      {
+        title: "Category Name",
+        dataIndex: "categoryName",
+        key: "categoryName",
       },
-    },
-  ];
+      {
+        title: "Description",
+        dataIndex: "description",
+        key: "description",
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        dataIndex: "_id",
+        render: (id: any) => {
+          return (
+            <Dropdown
+              trigger={["click"]}
+              dropdownRender={(menu) => (
+                <div>
+                  <Menu>
+                    <Menu.Item
+                      onClick={() => onEditHandle(true, id)}
+                      icon={<EditOutlined />}
+                    >
+                      Edit
+                    </Menu.Item>
+                    <Menu.Item
+                      onClick={() => onDetailsHandle(true, id)}
+                      icon={<SearchOutlined />}
+                    >
+                      Details
+                    </Menu.Item>
+                    <Menu.Item
+                      onClick={() => onDeleteHandle(id)}
+                      icon={<DeleteOutlined />}
+                      danger
+                    >
+                      Delete
+                    </Menu.Item>
+                  </Menu>
+                </div>
+              )}
+            >
+              <Button size={"middle"}>
+                <Space>
+                  <SettingOutlined />
+                </Space>
+              </Button>
+            </Dropdown>
+          );
+        },
+      },
+    ],
+    []
+  );
 
   return (
     <>
@@ -155,7 +209,7 @@ const List: React.FC = () => {
             <Table
               size="middle"
               locale={{
-                emptyText: "Data Yoxdur :(",
+                emptyText: "Data Yok :(",
                 filterSearchPlaceholder: "Ara",
               }}
               columns={columns}
@@ -167,8 +221,8 @@ const List: React.FC = () => {
 
       <CustomModal
         title="Category Details"
-        width={1000}
-        open={openDetail}
+        width={1200}
+        open={open.open}
         onOpenHandler={onDetailsHandle}
         content={content}
       />

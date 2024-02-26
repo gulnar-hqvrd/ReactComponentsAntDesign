@@ -50,6 +50,9 @@ export const fetchCategory = createAsyncThunk<
   }
 });
 
+/**
+ * updateCategory
+ */
 export const updateCategory = createAsyncThunk(
   "categories/updateCategory",
   async ({ id, category }: { id: string; category: Category }) => {
