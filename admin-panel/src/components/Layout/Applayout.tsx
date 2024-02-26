@@ -18,7 +18,7 @@ const AppLayout = ({ content }: { content: React.ReactNode }) => {
   };
 
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout>
       <Sider collapsed={collapsed} onCollapse={onCollapse} />
       <Layout>
         <Header
@@ -30,7 +30,7 @@ const AppLayout = ({ content }: { content: React.ReactNode }) => {
           style={{
             margin: "24px 16px",
             padding: 24,
-            background: colorBgContainer,
+            // background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >

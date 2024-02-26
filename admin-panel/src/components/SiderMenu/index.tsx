@@ -1,30 +1,35 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import Logo from "../../images/logo-white.svg";
+import { Avatar, Layout, Menu } from "antd";
+import "./index.less";
 
 const { Sider } = Layout;
 
-export interface ISliderMenuProps {
+export interface ISiderMenuProps {
   path?: any;
   collapsed: boolean;
   onCollapse: any;
+  // onCollapse: (collapsed: boolean) => void;
 }
 
-const Index = (props: ISliderMenuProps) => {
-  const { collapsed } = props;
+const Index = (props: ISiderMenuProps) => {
+  const { collapsed, onCollapse } = props;
   return (
     <div>
       <Sider
         trigger={null}
         collapsible
         collapsed={collapsed}
+        onCollapse={onCollapse}
         style={{ height: "100vh" }}
       >
-        <div className="demo-logo-vertical" />
+        <Avatar shape="square" src={Logo} />
+
         <Menu
           theme="dark"
           mode="inline"

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card, Col, Form, Input, Row } from "antd";
 import { useAppDispatch } from "../../app/hooks";
-import { createCategory } from "./categorySlice";
+import { addCategory } from "./categorySlice";
 import { useNavigate } from "react-router-dom";
 
 const layout = {
@@ -27,8 +27,8 @@ const Create: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const onFinish = (values: any) => {
-    dispatch(createCategory(values));
-    navigate("/categories");
+    dispatch(addCategory(values));
+    navigate("/category/index");
   };
 
   return (

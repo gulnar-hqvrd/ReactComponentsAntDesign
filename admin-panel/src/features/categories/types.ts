@@ -1,4 +1,4 @@
-import { TableProps } from "antd";
+import React from "react";
 
 export interface Category {
   _id?: string;
@@ -7,7 +7,7 @@ export interface Category {
 }
 
 export interface CategoryState {
-  list: Category[] | any[]; // -> null | any
+  list: Category[] | any[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   selected: Category | null;
@@ -18,26 +18,6 @@ export interface CategoryType {
   _id: string;
   categoryName: string;
   description?: string;
+  settings?: React.ReactNode;
   // tags: string[];
 }
-
-export const columns: TableProps<CategoryType>["columns"] | any = [
-  {
-    title: "Id",
-    dataIndex: "_id",
-    key: "_id",
-    render: (text: any) => {
-      return text;
-    },
-  },
-  {
-    title: "Category Name",
-    dataIndex: "categoryName",
-    key: "categoryName",
-  },
-  {
-    title: "Description",
-    dataIndex: "description",
-    key: "description",
-  },
-];

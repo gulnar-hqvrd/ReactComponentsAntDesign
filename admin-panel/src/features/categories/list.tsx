@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Row,
   Table,
@@ -9,7 +9,6 @@ import {
   TableProps,
   Dropdown,
   Space,
-  MenuProps,
   Menu,
 } from "antd";
 import { CategoryType } from "./types";
@@ -27,42 +26,45 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-
 import Card from "antd/es/card/Card";
 import CustomModal from "../../components/Modal";
+import CategoryDetail from "./components/categoryDetail";
 
 const List: React.FC = () => {
-  const dispatch = useAppDispatch();
+  // details modal
   const [openDetail, setOpenDetail] = useState(false);
 
+  // modal conetent ( details, edit)
   const [content, setContent] = useState<React.ReactNode | null>(null);
 
+  const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.category.list);
+  const category = useAppSelector((state) => state.category.selected);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  const onNavigate = () => {
-    navigate("/create-catogory");
-  };
+  useEffect(() => {
+    setContent(<CategoryDetail category={category} />);
+  }, [category]);
 
-  const onDeleteHandle = (e: any) => {
-    dispatch(deleteCategory(e));
-  };
-
-  const onDetailsHandle = (e: boolean) => {
-    dispatch(fetchCategory("id"));
-    // setContent(category?.categoName);
-    setOpenDetail(e);
-  };
-
-  const columns: TableProps<CategoryType>["columns"] | any = [
-    {
-      title: "Id",
-      dataIndex: "_id",
-      key: "_id",
+  const onDetailsHandle = useCallback(
+    (e: boolean, id?: string) => {
+      setOpenDetail(e);
+      if (id) {
+        dispatch(fetchCategory(id));
+      }
     },
+    [dispatch]
+  );
+
+  const onDeleteHandle = (e: any) => dispatch(deleteCategory(e));
+
+  const onNavigate = () => navigate("/category/create");
+  const columns: TableProps<CategoryType>["columns"] | any = [
     {
       title: "Category Name",
       dataIndex: "categoryName",
@@ -86,7 +88,7 @@ const List: React.FC = () => {
                 <Menu>
                   <Menu.Item icon={<EditOutlined />}>Edit</Menu.Item>
                   <Menu.Item
-                    onClick={() => onDetailsHandle(true)}
+                    onClick={() => onDetailsHandle(true, id)}
                     icon={<SearchOutlined />}
                   >
                     Details
@@ -153,7 +155,7 @@ const List: React.FC = () => {
             <Table
               size="middle"
               locale={{
-                emptyText: "Data Yok :(",
+                emptyText: "Data Yoxdur :(",
                 filterSearchPlaceholder: "Ara",
               }}
               columns={columns}
@@ -165,7 +167,7 @@ const List: React.FC = () => {
 
       <CustomModal
         title="Category Details"
-        width={500}
+        width={1000}
         open={openDetail}
         onOpenHandler={onDetailsHandle}
         content={content}

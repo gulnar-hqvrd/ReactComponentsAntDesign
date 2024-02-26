@@ -10,8 +10,8 @@ const initialState: CategoryState = {
   selected: null,
 };
 
-export const createCategory = createAsyncThunk(
-  "categories/createCategory",
+export const addCategory = createAsyncThunk(
+  "categories/addCategory",
   async (category: Category) => {
     const response = await http.post("/categories", category);
     return response.data;
@@ -61,11 +61,12 @@ const categorySlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.list = action.payload;
+        state.status = "succeeded";
       })
-      .addCase(createCategory.fulfilled, (state, action) => {
+      .addCase(addCategory.fulfilled, (state, action) => {
         state.list.push(action.payload);
+        state.status = "succeeded";
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.list = state.list.filter(
@@ -74,4 +75,64 @@ const categorySlice = createSlice({
       });
   },
 });
+
 export default categorySlice.reducer;
+
+/*
+import { createAsyncThunk, createSlice, createAction } from '@reduxjs/toolkit';
+import http from '../../common/utils/api';
+import { CategoryState } from './types';
+ 
+const initialState: CategoryState = {
+  list: [],
+  status: 'idle',
+  error: null,
+  selected: null,
+};
+ 
+export const fetchCategories = createAsyncThunk(
+  'categories/fetchCategories',
+  async () => {
+    const response = await http.get('/categories');
+    return response.data;
+  }
+);
+
+export const deleteCategory = createAsyncThunk(
+  'categories/deleteCategory',
+  async (id: string) => {
+    await http.delete(`/categories/${id}`);
+    return id;
+  }
+);
+ 
+const fetchCategoriesSuccess = createAction('categories/fetchCategoriesSuccess', (categories) => ({
+  payload: categories,
+}));
+
+const deleteCategorySuccess = createAction('categories/deleteCategorySuccess', (id) => ({
+  payload: id,
+}));
+ 
+const categorySlice = createSlice({
+  name: 'category',
+  initialState,
+  reducers: {
+    fetchCategoriesSuccess(state, action) {
+      state.status = 'succeeded';
+      state.list = action.payload;
+    },
+    deleteCategorySuccess(state, action) {
+      state.list = state.list.filter(category => category.id !== action.payload);
+    },
+    
+  },
+  extraReducers: (builder) => {
+    
+  },
+});
+ 
+export const { fetchCategoriesSuccess, deleteCategorySuccess } = categorySlice.actions; 
+export default categorySlice.reducer;
+ 
+*/

@@ -4,13 +4,14 @@ import { Modal } from "antd";
 interface ModalProps {
   title: string;
   width: number;
-  content: React.ReactNode;
   open: boolean;
+  content: React.ReactNode;
   onOpenHandler: (open: boolean) => void;
 }
+
+// const CustomModal: React.FC<ModalProps> = (props) => {
 const CustomModal = (props: ModalProps) => {
   const { content, open, width, title, onOpenHandler } = props;
-
   return (
     <>
       <Modal
@@ -20,7 +21,7 @@ const CustomModal = (props: ModalProps) => {
         onOk={() => onOpenHandler(false)}
         onCancel={() => onOpenHandler(false)}
         width={width}
-      >
+      > 
         {content}
       </Modal>
     </>

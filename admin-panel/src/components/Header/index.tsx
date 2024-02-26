@@ -1,19 +1,20 @@
-import { Header } from "antd/es/layout/layout";
 import React from "react";
-import { Layout, Button, theme } from "antd";
+import { Layout, Button } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
-export interface IHeaderMenuProps {
-  colorBgContainer: any;
+interface IHeaderProps {
   collapsed: boolean;
-  onCollapse: any;
+  colorBgContainer: any;
+  onCollapse: (collapsed: boolean) => void;
 }
 
-const Index = (props: IHeaderMenuProps) => {
-  const { collapsed, onCollapse, colorBgContainer } = props;
+const { Header } = Layout;
+
+const Index = (props: IHeaderProps) => {
+  const { collapsed, colorBgContainer, onCollapse } = props;
 
   return (
-    <div>
+    <>
       <Header style={{ padding: 0, background: colorBgContainer }}>
         <Button
           type="text"
@@ -26,7 +27,7 @@ const Index = (props: IHeaderMenuProps) => {
           }}
         />
       </Header>
-    </div>
+    </>
   );
 };
 
