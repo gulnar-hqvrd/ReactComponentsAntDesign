@@ -7,7 +7,7 @@ export interface Category {
 }
 
 export interface CategoryState {
-  list: Category[] | []; // -> null | any
+  list: Category[] | any[]; // -> null | any
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   selected: Category | null;
