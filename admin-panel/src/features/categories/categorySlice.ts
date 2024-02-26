@@ -50,6 +50,14 @@ export const fetchCategory = createAsyncThunk<
   }
 });
 
+export const updateCategory = createAsyncThunk(
+  "categories/updateCategory",
+  async ({ id, category }: { id: string; category: Category }) => {
+    const response = await http.patch(`/categories/${id}`, category);
+    return response.data;
+  }
+);
+
 const categorySlice = createSlice({
   name: "category",
   initialState,
@@ -66,6 +74,15 @@ const categorySlice = createSlice({
       })
       .addCase(addCategory.fulfilled, (state, action) => {
         state.list.push(action.payload);
+        state.status = "succeeded";
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        const index = state.list.findIndex(
+          (category) => category._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.list[index] = action.payload;
+        }
         state.status = "succeeded";
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
